@@ -22,9 +22,11 @@ class PostsController < ApplicationController
   # POST /posts or /posts.json
   def create
     @post = Post.new(post_params)
+    @post.user = current_user
 
     respond_to do |format|
       if @post.save
+        create_post_sentences(@post)
         format.html { redirect_to @post, notice: "Post was successfully created." }
         format.json { render :show, status: :created, location: @post }
       else
@@ -65,6 +67,17 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.fetch(:post, {})
+      params.require(:post).permit(:title, :text)
+    end
+
+    def create_post_sentences(post)
+      sentences = post.text.split(/(?<=[.!?])\s+/)
+      sentences.each_with_index do |sentence_text, index|
+        PostSentence.create(
+          post: post,
+          sentence_number: index + 1,
+          text: sentence_text.strip
+        )
+      end
     end
 end

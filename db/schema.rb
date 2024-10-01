@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_01_103527) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_01_110937) do
+  create_table "post_sentences", force: :cascade do |t|
+    t.integer "post_id", null: false
+    t.integer "sentence_number"
+    t.string "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_post_sentences_on_post_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "text"
@@ -32,5 +41,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_01_103527) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "post_sentences", "posts"
   add_foreign_key "posts", "users"
 end
