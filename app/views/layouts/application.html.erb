@@ -23,13 +23,23 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <% flash.each do |type, message| %>
-      <div class="flash flash-<%= type %>">
-        <%= message %>
-      </div>
-    <% end %>
+ <body class="font-sans antialiased">
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+      <%= render partial: 'shared/navigation' %>
 
-    <%= yield %>
+      <!-- Page Heading -->
+      <% if content_for?(:header) %>
+        <header class="bg-white dark:bg-gray-800 shadow">
+          <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <%= yield :header %>
+          </div>
+        </header>
+      <% end %>
+
+      <!-- Page Content -->
+      <main>
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>
