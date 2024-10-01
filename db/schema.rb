@@ -10,7 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_01_132233) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_01_142542) do
+  create_table "correction_sentences", force: :cascade do |t|
+    t.integer "correction_id", null: false
+    t.integer "post_sentence_id", null: false
+    t.string "corrected_text"
+    t.string "explanation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["correction_id"], name: "index_correction_sentences_on_correction_id"
+    t.index ["post_sentence_id"], name: "index_correction_sentences_on_post_sentence_id"
+  end
+
+  create_table "corrections", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_corrections_on_post_id"
+    t.index ["user_id"], name: "index_corrections_on_user_id"
+  end
+
   create_table "post_sentences", force: :cascade do |t|
     t.integer "post_id", null: false
     t.integer "sentence_number"
@@ -42,6 +62,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_01_132233) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "correction_sentences", "corrections"
+  add_foreign_key "correction_sentences", "post_sentences"
+  add_foreign_key "corrections", "posts"
+  add_foreign_key "corrections", "users"
   add_foreign_key "post_sentences", "posts"
   add_foreign_key "posts", "users"
 end
